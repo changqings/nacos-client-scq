@@ -18,3 +18,49 @@ NACOS_AUTH_IDENTITY_KEY=username
 NACOS_AUTH_IDENTITY_VALUE=shenchangqing
 NACOS_AUTH_TOKEN=SmtjeENZN21nY1ZxdTRYWUN0SktrTEpBdXhuSHZDRUwK # 此值为原32位字符串base64加密后的值，不然启动报错
 ```
+
+## 引入
+
+```
+go get github.com/changqings/nacos-client-scq/nacosclient
+```
+
+### example
+
+```go
+	stopCh, cancel := signal.NotifyContext(context.Background(), syscall.SIGTERM, syscall.SIGINT)
+	defer cancel()
+
+	client, err := clientConfig.NewClient()
+	if err != nil {
+		slog.Error("get client", "msg", err)
+		return
+	}
+
+	// get config
+	dataId, group := "test01", "dev"
+	data, err := nacosclient.GetConfig(client, dataId, group)
+	if err != nil {
+		slog.Error("get config", "dataId", dataId, "group", group, "msg", err)
+		return
+	}
+	slog.Info("get config", "dataId", dataId, "group", group, "data", data)
+
+	// listen config, shoud block blow
+	dataId, group = "test02", "dev"
+	lisData, err := nacosclient.ListenConfig(client, dataId, group, stopCh)
+	if err != nil {
+		slog.Error("listen config", "dataId", dataId, "group", group, "msg", err)
+	}
+
+	//
+	for {
+		select {
+		case d := <-lisData:
+			fmt.Printf("config changed, ns: %s, group: %s, dataId: %s, new data: %s\n",
+				d.Namespace, d.Group, d.DataId, d.Data)
+		case <-stopCh.Done():
+			os.Exit(0)
+		}
+	}
+```
