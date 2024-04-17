@@ -97,7 +97,7 @@ func main() {
 	})
 
 	if errListen != nil {
-		slog.Error("get config", "msg", errListen)
+		slog.Error("listen config", "msg", errListen)
 		os.Exit(1)
 	}
 
