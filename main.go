@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log/slog"
 	"os"
 	"os/signal"
@@ -53,9 +52,9 @@ func main() {
 	for {
 		select {
 		case d := <-lisData:
-			fmt.Printf("config changed, ns: %s, group: %s, dataId: %s, new data: %s\n",
-				d.Namespace, d.Group, d.DataId, d.Data)
+			slog.Info("config changed", "namespace", d.Namespace, "dataId", d.DataId, "group", d.Group, "data", d.Data)
 		case <-stopCh.Done():
+			slog.Info("get exit signal, bye bye.")
 			os.Exit(0)
 		}
 	}
