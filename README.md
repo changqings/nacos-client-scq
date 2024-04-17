@@ -13,7 +13,7 @@ NACOS_AUTH_ENABLE=true
 
 ## 以下identity_key_value
 # 官方说明，https://nacos.io/zh-cn/blog/announcement-token-secret-key.html
-# 文档这块做的不是很好，这还是我在google上查到的，官方文档的查询是百度，而不是内部查询，LJ
+# 文档这块做的不是很好，这还是我在google上查到的，官方文档的查询是百度，而不是内部查询
 NACOS_AUTH_IDENTITY_KEY=username
 NACOS_AUTH_IDENTITY_VALUE=shenchangqing
 NACOS_AUTH_TOKEN=SmtjeENZN21nY1ZxdTRYWUN0SktrTEpBdXhuSHZDRUwK # 此值为原32位字符串base64加密后的值，不然启动报错
