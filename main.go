@@ -41,7 +41,7 @@ func main() {
 	}
 	slog.Info("get config", "dataId", dataId, "group", group, "data", data)
 
-	// listen config, shoud block blow
+	// listen config, shoud block below
 	dataId, group = "test02", "dev"
 	lisData, err := nacosclient.ListenConfig(client, dataId, group, stopCh)
 	if err != nil {
