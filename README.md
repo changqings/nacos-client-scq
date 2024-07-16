@@ -46,7 +46,7 @@ go get github.com/changqings/nacos-client-scq/nacosclient
 	}
 	slog.Info("get config", "dataId", dataId, "group", group, "data", data)
 
-	// listen config, shoud block blow
+	// listen config, should block blow
 	dataId, group = "test02", "dev"
 	lisData, err := nacosclient.ListenConfig(client, dataId, group, stopCh)
 	if err != nil {
