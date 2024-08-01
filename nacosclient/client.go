@@ -81,17 +81,27 @@ func ListenConfig(nc NacosClient, dataId string, group string, stopCh context.Co
 	// listen config
 	dataCh := make(chan DataConfig, 1)
 
-	err := nc.ListenConfig(vo.ConfigParam{
-		DataId: dataId,
-		Group:  group,
-		OnChange: func(namespace, group, dataId, data string) {
-			dataCh <- DataConfig{
-				Namespace: namespace,
-				Group:     group,
-				DataId:    dataId,
-				Data:      data,
+	onChangeFunc := func(namespace, group, dataId, data string) {
+		for {
+			select {
+			case <-stopCh.Done():
+				close(dataCh)
+				return
+			default:
+				dataCh <- DataConfig{
+					Namespace: namespace,
+					Group:     group,
+					DataId:    dataId,
+					Data:      data,
+				}
 			}
-		},
+		}
+	}
+
+	err := nc.ListenConfig(vo.ConfigParam{
+		DataId:   dataId,
+		Group:    group,
+		OnChange: onChangeFunc,
 	})
 
 	return dataCh, err
